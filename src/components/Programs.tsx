@@ -1,7 +1,21 @@
+"use client";
+
 import { Card } from "@/components/ui/card";
 import { FileCheck, Trophy, GraduationCap, BookOpen, Sparkles } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef, useState } from "react";
 
 export const Programs = () => {
+  const sectionRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  const parallaxY = useTransform(scrollYProgress, [0, 1], [-40, 40]);
+  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
+
   const programs = [
     {
       id: "state-test",
@@ -33,8 +47,7 @@ export const Programs = () => {
       shadow: "shadow-green-500/50",
       iconBg: "bg-gradient-to-br from-emerald-400 to-teal-600"
     },
-    
-   {
+    {
       id: "regents",
       icon: BookOpen,
       title: "Regents Exams",
@@ -44,7 +57,6 @@ export const Programs = () => {
       shadow: "shadow-orange-500/50",
       iconBg: "bg-gradient-to-br from-orange-400 to-yellow-600"
     },
-
     {
       id: "ap",
       icon: Sparkles,
@@ -57,73 +69,306 @@ export const Programs = () => {
     }
   ];
 
-  return (
-    <section id="programs" className="py-20 bg-gradient-to-b from-background to-slate-50 dark:to-slate-900">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16 animate-fade-in">
-            <h2 className="text-5xl sm:text-6xl font-black text-foreground mb-4 tracking-tight">
-              Our Programs
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Comprehensive tutoring programs designed for every academic goal
-            </p>
-            <div className="w-24 h-1 bg-gradient-to-r from-primary via-accent to-primary mx-auto mt-6 rounded-full"></div>
-          </div>
+  const ProgramCard = ({ program, index }: { program: any; index: number }) => {
+    const cardRef = useRef<HTMLDivElement>(null);
+    const [rotateX, setRotateX] = useState(0);
+    const [rotateY, setRotateY] = useState(0);
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {programs.map((program, index) => (
-              <Card 
-                id={program.id}
-                key={index}
-                className="group relative overflow-hidden card-hover-float hover:shadow-2xl transition-all duration-500 border-2 border-slate-200 hover:border-transparent cursor-pointer bg-white dark:bg-slate-800"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                {/* Vibrant gradient background on hover */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${program.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
-                
-                {/* Glow effect */}
-                <div className={`absolute -inset-1 bg-gradient-to-r ${program.color} opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500 ${program.shadow}`}></div>
-                
-                <div className="relative p-8 space-y-4 group-hover:text-white transition-colors duration-500">
-                  {/* Icon with enhanced animation */}
-                  <div className={`w-16 h-16 ${program.iconBg} rounded-2xl flex items-center justify-center transform group-hover:scale-110 group-hover:rotate-12 transition-all duration-500 shadow-xl group-hover:shadow-2xl`}>
-                    <program.icon className="w-8 h-8 text-white" />
-                  </div>
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+      if (!cardRef.current) return;
 
-                  {/* Title */}
-                  <div>
-                    <h3 className="text-2xl font-bold text-foreground group-hover:text-white mb-1 transition-colors duration-500">
-                      {program.title}
-                    </h3>
-                    <p className="text-sm font-semibold text-primary group-hover:text-white/90 transition-colors duration-500">
-                      {program.subtitle}
-                    </p>
-                  </div>
+      const rect = cardRef.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const mouseX = e.clientX - centerX;
+      const mouseY = e.clientY - centerY;
 
-                  {/* Description */}
-                  <p className="text-muted-foreground group-hover:text-white/90 leading-relaxed transition-colors duration-500">
-                    {program.description}
-                  </p>
+      const rotateXValue = (mouseY / rect.height) * -12;
+      const rotateYValue = (mouseX / rect.width) * 12;
 
-                  {/* Hover indicator with arrow animation */}
-                  <div className="flex items-center gap-2 text-primary group-hover:text-white opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                    <span className="text-sm font-semibold">Learn more</span>
-                    <svg className="w-4 h-4 transform group-hover:translate-x-2 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </div>
-                </div>
+      setRotateX(rotateXValue);
+      setRotateY(rotateYValue);
+    };
 
-                {/* Decorative corner accent */}
-                <div className="absolute top-0 right-0 w-20 h-20 opacity-0 group-hover:opacity-20 transition-opacity duration-500">
-                  <div className={`absolute top-0 right-0 w-full h-full bg-gradient-to-bl ${program.color} rounded-bl-full`}></div>
-                </div>
-              </Card>
+    const handleMouseLeave = () => {
+      setRotateX(0);
+      setRotateY(0);
+    };
+
+    return (
+      <motion.div
+        ref={cardRef}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        style={{
+          rotateX,
+          rotateY,
+          transformStyle: "preserve-3d",
+        }}
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, delay: index * 0.1 }}
+        whileHover={{ scale: 1.03, z: 50 }}
+        className="h-full"
+      >
+        <Card 
+          id={program.id}
+          className="group relative overflow-hidden hover:shadow-2xl transition-all duration-500 border-2 border-white/20 cursor-pointer bg-white/10 dark:bg-slate-800/10 backdrop-blur-xl h-full"
+        >
+          {/* Glassmorphism background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-md"></div>
+
+          {/* Vibrant gradient background on hover */}
+          <motion.div 
+            className={`absolute inset-0 bg-gradient-to-br ${program.color} opacity-0 group-hover:opacity-90 transition-opacity duration-700`}
+            animate={{
+              backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+            style={{
+              backgroundSize: "200% 200%"
+            }}
+          ></motion.div>
+          
+          {/* Glow effect */}
+          <div className={`absolute -inset-1 bg-gradient-to-r ${program.color} opacity-0 group-hover:opacity-30 blur-2xl transition-opacity duration-700 ${program.shadow}`}></div>
+          
+          {/* Shimmer effect */}
+          <motion.div
+            className="absolute inset-0 opacity-0 group-hover:opacity-100"
+            style={{
+              background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)",
+            }}
+            animate={{
+              x: ["-100%", "200%"],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "linear",
+              repeatDelay: 1,
+            }}
+          ></motion.div>
+
+          {/* Floating particles */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {[...Array(4)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-1 h-1 bg-white rounded-full opacity-0 group-hover:opacity-60"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                }}
+                animate={{
+                  y: [-20, -100],
+                  opacity: [0, 0.6, 0],
+                }}
+                transition={{
+                  duration: 2 + Math.random() * 2,
+                  repeat: Infinity,
+                  delay: Math.random() * 2,
+                }}
+              />
             ))}
           </div>
-        </div>
+          
+          <div 
+            className="relative p-8 space-y-4 transition-colors duration-500"
+            style={{ transform: "translateZ(50px)" }}
+          >
+            {/* Icon with enhanced animation */}
+            <motion.div 
+              className={`w-16 h-16 ${program.iconBg} rounded-2xl flex items-center justify-center shadow-2xl relative`}
+              whileHover={{ 
+                scale: 1.2, 
+                rotate: [0, -10, 10, 0],
+                transition: { duration: 0.5 }
+              }}
+              style={{ transform: "translateZ(75px)" }}
+            >
+              <program.icon className="w-8 h-8 text-white" />
+              <div className={`absolute inset-0 ${program.iconBg} rounded-2xl blur-xl opacity-50 group-hover:opacity-100 transition-opacity duration-500`}></div>
+            </motion.div>
+
+            {/* Title */}
+            <div style={{ transform: "translateZ(50px)" }}>
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-white mb-1 transition-colors duration-500 drop-shadow-lg">
+                {program.title}
+              </h3>
+              <p className="text-sm font-semibold text-cyan-600 dark:text-cyan-400 group-hover:text-white/90 transition-colors duration-500 drop-shadow-md">
+                {program.subtitle}
+              </p>
+            </div>
+
+            {/* Description */}
+            <p 
+              className="text-slate-700 dark:text-slate-200 group-hover:text-white/90 leading-relaxed transition-colors duration-500 font-medium drop-shadow-md"
+              style={{ transform: "translateZ(40px)" }}
+            >
+              {program.description}
+            </p>
+
+            {/* Hover indicator with arrow animation */}
+            <motion.div 
+              className="flex items-center gap-2 text-cyan-600 dark:text-cyan-400 group-hover:text-white opacity-0 group-hover:opacity-100 transition-all duration-300"
+              style={{ transform: "translateZ(40px)" }}
+              initial={{ y: 8 }}
+              whileHover={{ x: 8 }}
+            >
+              <span className="text-sm font-semibold">Learn more</span>
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </motion.div>
+          </div>
+
+          {/* Decorative corner accent */}
+          <motion.div 
+            className="absolute top-0 right-0 w-20 h-20 opacity-0 group-hover:opacity-30 transition-opacity duration-500"
+            animate={{
+              rotate: [0, 180, 360],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          >
+            <div className={`absolute top-0 right-0 w-full h-full bg-gradient-to-bl ${program.color} rounded-bl-full`}></div>
+          </motion.div>
+
+          {/* Bottom accent line */}
+          <motion.div
+            className={`absolute bottom-0 left-0 h-1 bg-gradient-to-r ${program.color}`}
+            initial={{ width: 0 }}
+            whileHover={{ width: "100%" }}
+            transition={{ duration: 0.5 }}
+          ></motion.div>
+        </Card>
+      </motion.div>
+    );
+  };
+
+  return (
+    <section 
+      id="programs" 
+      ref={sectionRef}
+      className="relative py-24 bg-gradient-to-br from-slate-900 via-cyan-900 to-slate-900 overflow-hidden"
+    >
+      {/* Animated background orbs */}
+      <div className="absolute inset-0 overflow-hidden">
+        <motion.div
+          className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            x: [-20, 20, -20],
+            y: [-20, 20, -20],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <motion.div
+          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"
+          animate={{
+            scale: [1.2, 1, 1.2],
+            x: [20, -20, 20],
+            y: [20, -20, 20],
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
       </div>
+
+      {/* Floating particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {[...Array(20)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-2 h-2 bg-white/20 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [-20, -100],
+              opacity: [0, 0.5, 0],
+            }}
+            transition={{
+              duration: 3 + Math.random() * 3,
+              repeat: Infinity,
+              delay: Math.random() * 5,
+            }}
+          />
+        ))}
+      </div>
+
+      <motion.div 
+        className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10"
+        style={{ opacity }}
+      >
+        <div className="max-w-7xl mx-auto">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <motion.h2 
+              className="text-5xl sm:text-6xl lg:text-7xl font-black text-white mb-6 tracking-tight"
+              animate={{
+                textShadow: [
+                  "0 0 20px rgba(6, 182, 212, 0.5)",
+                  "0 0 40px rgba(6, 182, 212, 0.8)",
+                  "0 0 20px rgba(6, 182, 212, 0.5)",
+                ],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            >
+              Our Programs
+            </motion.h2>
+            <p className="text-xl text-white/80 max-w-2xl mx-auto mb-6">
+              Comprehensive tutoring programs designed for every academic goal
+            </p>
+            <motion.div 
+              className="w-32 h-1.5 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 mx-auto rounded-full"
+              animate={{
+                scaleX: [1, 1.2, 1],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            ></motion.div>
+          </motion.div>
+
+          <motion.div
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+            style={{ y: parallaxY }}
+          >
+            {programs.map((program, index) => (
+              <ProgramCard key={index} program={program} index={index} />
+            ))}
+          </motion.div>
+        </div>
+      </motion.div>
     </section>
   );
 };

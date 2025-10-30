@@ -8,6 +8,8 @@ import { Programs } from "@/components/Programs";
 import { Commitment } from "@/components/Commitment";
 import { Pricing } from "@/components/Pricing";
 import { Footer } from "@/components/Footer";
+import { ContactForm } from "@/components/ContactForm";
+
 
 const Index = () => {
   return (
@@ -19,12 +21,13 @@ const Index = () => {
       </div>
       <ProfileImage />
       <About />
-      <TeachingPhilosophy />
       <div id="programs">
         <Programs />
       </div>
+      <ContactForm />
       <Commitment />
       <Pricing />
+      <TeachingPhilosophy />
       <Footer />
     </div>
   );

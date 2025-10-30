@@ -197,9 +197,233 @@ All colors MUST be HSL.
       opacity: 0.9;
     }
   }
+
+  /* Hero Section Animations */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px) translateZ(0);
+    }
+    50% {
+      transform: translateY(-20px) translateZ(50px);
+    }
+  }
+
+  @keyframes glow {
+    0%, 100% {
+      text-shadow: 0 0 20px rgba(251, 146, 60, 0.5),
+        0 0 40px rgba(251, 146, 60, 0.3), 0 0 60px rgba(251, 146, 60, 0.2);
+    }
+    50% {
+      text-shadow: 0 0 30px rgba(251, 146, 60, 0.7),
+        0 0 50px rgba(251, 146, 60, 0.5), 0 0 70px rgba(251, 146, 60, 0.3);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes gradient-shift {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  @keyframes fade-in-up {
+    0% {
+      opacity: 0;
+      transform: translateY(30px) translateZ(-100px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) translateZ(0);
+    }
+  }
+
+  @keyframes morph {
+    0%, 100% {
+      border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    }
+    50% {
+      border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+    }
+  }
+
+  @keyframes particle-float {
+    0% {
+      opacity: 0;
+      transform: translateY(100vh) translateX(0) scale(0);
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-100vh) translateX(100px) scale(1.5);
+    }
+  }
+
+  @keyframes grain {
+    0%, 100% {
+      transform: translate(0, 0);
+    }
+    10% {
+      transform: translate(-5%, -10%);
+    }
+    20% {
+      transform: translate(-15%, 5%);
+    }
+    30% {
+      transform: translate(7%, -25%);
+    }
+    40% {
+      transform: translate(-5%, 25%);
+    }
+    50% {
+      transform: translate(-15%, 10%);
+    }
+    60% {
+      transform: translate(15%, 0%);
+    }
+    70% {
+      transform: translate(0%, 15%);
+    }
+    80% {
+      transform: translate(3%, 20%);
+    }
+    90% {
+      transform: translate(-10%, 10%);
+    }
+  }
 }
 
 @layer utilities {
+  /* Hero 3D Effects */
+  .perspective-container {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+  }
+
+  .parallax-layer {
+    position: absolute;
+    inset: 0;
+    will-change: transform;
+  }
+
+  .parallax-bg {
+    transform: translateZ(-2px) scale(1.5);
+  }
+
+  .parallax-mid {
+    transform: translateZ(-1px) scale(1.2);
+  }
+
+  .parallax-front {
+    transform: translateZ(0px) scale(1);
+  }
+
+  .text-glow {
+    animation: glow 3s ease-in-out infinite;
+  }
+
+  .shimmer-effect {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shimmer-effect::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent
+    );
+    animation: shimmer 3s infinite;
+  }
+
+  .gradient-animated {
+    background-size: 200% 200%;
+    animation: gradient-shift 4s ease infinite;
+  }
+
+  .float-3d {
+    animation: float 6s ease-in-out infinite;
+    transform-style: preserve-3d;
+  }
+
+  .morph-shape {
+    animation: morph 8s ease-in-out infinite;
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .neon-button {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .neon-button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent
+    );
+    transition: left 0.5s;
+  }
+
+  .neon-button:hover::before {
+    left: 100%;
+  }
+
+  .particle {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0;
+    animation: particle-float 10s infinite;
+  }
+
+  .grain::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+    animation: grain 7s steps(10) infinite;
+    opacity: 0.15;
+    mix-blend-mode: overlay;
+  }
+
   /* Glassmorphism effect */
   .glass-overlay {
     position: relative;
@@ -322,15 +546,6 @@ All colors MUST be HSL.
     to {
       opacity: 1;
       transform: translateY(0);
-    }
-  }
-  
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-10px);
     }
   }
   
