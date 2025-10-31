@@ -565,3 +565,69 @@ All colors MUST be HSL.
     transform: translateY(-8px) rotateX(2deg);
   }
 }
+
+/* ===================================
+   MOBILE PERFORMANCE OPTIMIZATIONS
+   =================================== */
+
+/* Disable heavy effects on mobile */
+@media (max-width: 768px) {
+  /* Disable parallax transforms */
+  .parallax-layer,
+  .parallax-bg,
+  .parallax-mid,
+  .parallax-front {
+    transform: none !important;
+  }
+  
+  /* Disable morph animations */
+  .morph-shape {
+    animation: none !important;
+    transform: none !important;
+  }
+  
+  /* Disable floating animations */
+  .float-3d {
+    animation: none !important;
+  }
+  
+  /* Remove 3D perspective */
+  .perspective-container {
+    perspective: none !important;
+  }
+  
+  /* Reduce blur intensity for better performance */
+  .blur-3xl {
+    filter: blur(24px) !important;
+  }
+  
+  /* Speed up remaining animations */
+  * {
+    animation-duration: 0.3s !important;
+    transition-duration: 0.3s !important;
+  }
+  
+  /* Disable particle animations */
+  .particle {
+    animation-duration: 3s !important;
+  }
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .parallax-layer,
+  .morph-shape,
+  .float-3d {
+    animation: none !important;
+    transform: none !important;
+  }
+}

@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, BookOpen, Target, Trophy, Users, Star } from "lucide-react";
+import { ArrowRight, BookOpen, Target, Trophy, Users } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-
 
 export const Hero = () => {
   const heroContentRef = useRef<HTMLDivElement>(null);
@@ -10,8 +9,19 @@ export const Hero = () => {
   const parallaxMidRef = useRef<HTMLDivElement>(null);
   const parallaxFrontRef = useRef<HTMLDivElement>(null);
   
-  // Review modal state
-  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  // Mobile detection
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -27,8 +37,10 @@ export const Hero = () => {
     }
   };
 
-  // Advanced parallax scrolling with 3D depth
+  // Advanced parallax scrolling with 3D depth - DISABLED ON MOBILE
   useEffect(() => {
+    if (isMobile) return; // Skip parallax on mobile
+    
     let ticking = false;
 
     const updateParallax = () => {
@@ -61,10 +73,12 @@ export const Hero = () => {
     window.addEventListener("scroll", requestTick);
 
     return () => window.removeEventListener("scroll", requestTick);
-  }, []);
+  }, [isMobile]);
 
-  // Mouse parallax effect for 3D depth
+  // Mouse parallax effect for 3D depth - DISABLED ON MOBILE
   useEffect(() => {
+    if (isMobile) return; // Skip mouse effects on mobile
+    
     const handleMouseMove = (e: MouseEvent) => {
       const mouseX = e.clientX / window.innerWidth - 0.5;
       const mouseY = e.clientY / window.innerHeight - 0.5;
@@ -84,9 +98,9 @@ export const Hero = () => {
     document.addEventListener("mousemove", handleMouseMove);
 
     return () => document.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+  }, [isMobile]);
 
-  // Generate floating particles
+  // Generate floating particles - REDUCED ON MOBILE
   useEffect(() => {
     const createParticle = () => {
       if (!particleContainerRef.current) return;
@@ -114,49 +128,50 @@ export const Hero = () => {
       }, duration * 1000);
     };
 
-    // Create particles periodically
-    const interval = setInterval(createParticle, 500);
+    // Reduce particles on mobile
+    const particleCount = isMobile ? 5 : 20;
+    const interval = setInterval(createParticle, isMobile ? 1000 : 500);
 
     // Initial particles
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < particleCount; i++) {
       setTimeout(createParticle, i * 100);
     }
 
     return () => clearInterval(interval);
-  }, []);
+  }, [isMobile]);
 
   return (
     <section
       id="hero"
-      className="relative min-h-screen perspective-container overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900"
+      className={`relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 ${!isMobile ? 'perspective-container' : ''}`}
     >
-      {/* Multi-layer parallax background */}
-      <div className="parallax-layer parallax-bg" ref={parallaxBgRef}>
+      {/* Multi-layer parallax background - DISABLED ON MOBILE */}
+      <div className={isMobile ? "" : "parallax-layer parallax-bg"} ref={parallaxBgRef}>
         <div className="absolute inset-0 bg-gradient-to-b from-slate-900/50 via-purple-900/30 to-slate-900/50"></div>
       </div>
 
-      {/* Animated 3D orbs in mid layer */}
-      <div className="parallax-layer parallax-mid" ref={parallaxMidRef}>
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 morph-shape">
-          <div className="w-full h-full bg-gradient-to-br from-orange-500/20 to-purple-600/20 blur-3xl animate-pulse"></div>
+      {/* Animated 3D orbs in mid layer - SIMPLIFIED ON MOBILE */}
+      <div className={isMobile ? "" : "parallax-layer parallax-mid"} ref={parallaxMidRef}>
+        <div className={`absolute top-1/4 left-1/4 w-96 h-96 ${!isMobile ? 'morph-shape' : ''}`}>
+          <div className={`w-full h-full bg-gradient-to-br from-orange-500/20 to-purple-600/20 ${isMobile ? 'blur-xl' : 'blur-3xl'} animate-pulse`}></div>
         </div>
         <div
-          className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] morph-shape"
-          style={{ animationDelay: "2s" }}
+          className={`absolute bottom-1/4 right-1/4 w-[500px] h-[500px] ${!isMobile ? 'morph-shape' : ''}`}
+          style={!isMobile ? { animationDelay: "2s" } : {}}
         >
-          <div className="w-full h-full bg-gradient-to-tr from-blue-500/20 to-indigo-600/20 blur-3xl animate-pulse"></div>
+          <div className={`w-full h-full bg-gradient-to-tr from-blue-500/20 to-indigo-600/20 ${isMobile ? 'blur-xl' : 'blur-3xl'} animate-pulse`}></div>
         </div>
         <div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] morph-shape"
-          style={{ animationDelay: "4s" }}
+          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] ${!isMobile ? 'morph-shape' : ''}`}
+          style={!isMobile ? { animationDelay: "4s" } : {}}
         >
-          <div className="w-full h-full bg-gradient-to-bl from-purple-500/15 to-pink-600/15 blur-3xl animate-pulse"></div>
+          <div className={`w-full h-full bg-gradient-to-bl from-purple-500/15 to-pink-600/15 ${isMobile ? 'blur-xl' : 'blur-3xl'} animate-pulse`}></div>
         </div>
       </div>
 
       {/* Floating particles */}
       <div
-        className="parallax-layer parallax-front"
+        className={isMobile ? "" : "parallax-layer parallax-front"}
         ref={parallaxFrontRef}
       ></div>
       <div
@@ -168,13 +183,13 @@ export const Hero = () => {
       {/* Grain texture overlay */}
       <div className="absolute inset-0 grain pointer-events-none"></div>
 
-      {/* Year markers with 3D effect */}
-      <div className="absolute top-8 left-8 text-white/60 text-sm font-mono tracking-wider z-20 float-3d">
+      {/* Year markers with 3D effect - SIMPLIFIED ON MOBILE */}
+      <div className={`absolute top-8 left-8 text-white/60 text-sm font-mono tracking-wider z-20 ${!isMobile ? 'float-3d' : ''}`}>
         <span className="shimmer-effect">2025</span>
       </div>
       <div
-        className="absolute top-8 right-8 text-white/60 text-sm font-mono tracking-wider z-20 float-3d"
-        style={{ animationDelay: "0.5s" }}
+        className={`absolute top-8 right-8 text-white/60 text-sm font-mono tracking-wider z-20 ${!isMobile ? 'float-3d' : ''}`}
+        style={!isMobile ? { animationDelay: "0.5s" } : {}}
       >
         <span className="shimmer-effect">NYC</span>
       </div>
@@ -186,7 +201,7 @@ export const Hero = () => {
           style={{ animation: "fade-in-up 1s ease-out 1.2s forwards" }}
         >
           {/* Students Count */}
-          <div className="glass p-6 rounded-2xl float-3d hover:scale-105 transition-transform duration-300">
+          <div className={`glass p-6 rounded-2xl hover:scale-105 transition-transform duration-300 ${!isMobile ? 'float-3d' : ''}`}>
             <div className="flex items-center gap-4">
               <div className="p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl">
                 <Users className="w-6 h-6 text-white" />
@@ -200,8 +215,8 @@ export const Hero = () => {
 
           {/* Experience */}
           <div
-            className="glass p-6 rounded-2xl float-3d hover:scale-105 transition-transform duration-300"
-            style={{ animationDelay: "0.2s" }}
+            className={`glass p-6 rounded-2xl hover:scale-105 transition-transform duration-300 ${!isMobile ? 'float-3d' : ''}`}
+            style={!isMobile ? { animationDelay: "0.2s" } : {}}
           >
             <div className="flex items-center gap-4">
               <div className="p-3 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl">
@@ -216,8 +231,8 @@ export const Hero = () => {
 
           {/* Success Rate */}
           <div
-            className="glass p-6 rounded-2xl float-3d hover:scale-105 transition-transform duration-300"
-            style={{ animationDelay: "0.4s" }}
+            className={`glass p-6 rounded-2xl hover:scale-105 transition-transform duration-300 ${!isMobile ? 'float-3d' : ''}`}
+            style={!isMobile ? { animationDelay: "0.4s" } : {}}
           >
             <div className="flex items-center gap-4">
               <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl">
@@ -235,14 +250,14 @@ export const Hero = () => {
       {/* Main Content */}
       <div className="relative z-10 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-7xl mx-auto" ref={heroContentRef}>
-          {/* Animated title with 3D depth */}
-          <div className="mb-8 perspective-container">
+          {/* Animated title with 3D depth - SIMPLIFIED ON MOBILE */}
+          <div className={`mb-8 ${!isMobile ? 'perspective-container' : ''}`}>
             <h1
               className="font-sans text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-black text-white leading-tight tracking-wide drop-shadow-2xl"
-              style={{
+              style={!isMobile ? {
                 transform: "rotateX(5deg) translateZ(50px)",
                 transformStyle: "preserve-3d",
-              }}
+              } : {}}
             >
               <span className="inline-block hover:scale-110 transition-transform duration-300">
                 D.S
@@ -279,14 +294,14 @@ export const Hero = () => {
             <span className="shimmer-effect">Building Bright Futures</span>
           </p>
 
-          {/* 3D Buttons with Review Button */}
+          {/* 3D Buttons */}
           <div
             className="flex flex-col sm:flex-row gap-6 justify-center items-center opacity-0"
             style={{ animation: "fade-in-up 1s ease-out 0.9s forwards" }}
           >
             <button
               onClick={() => scrollToSection("programs")}
-              className="group relative px-10 py-6 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold text-lg rounded-full shadow-2xl hover:shadow-orange-500/50 transform hover:scale-105 transition-all duration-300 neon-button perspective-container"
+              className={`group relative px-10 py-6 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold text-lg rounded-full shadow-2xl hover:shadow-orange-500/50 transform hover:scale-105 transition-all duration-300 neon-button ${!isMobile ? 'perspective-container' : ''}`}
             >
               <span className="relative z-10 flex items-center">
                 Get Started Today
@@ -305,30 +320,26 @@ export const Hero = () => {
 
             <button
               onClick={() => scrollToSection("pricing")}
-              className="group relative px-10 py-6 bg-gradient-to-r from-purple-500 to-purple-600 text-white font-bold text-lg rounded-full shadow-2xl hover:shadow-purple-500/50 transform hover:scale-105 transition-all duration-300 neon-button perspective-container"
+              className={`group relative px-10 py-6 bg-gradient-to-r from-purple-500 to-purple-600 text-white font-bold text-lg rounded-full shadow-2xl hover:shadow-purple-500/50 transform hover:scale-105 transition-all duration-300 neon-button ${!isMobile ? 'perspective-container' : ''}`}
             >
               <span className="relative z-10 flex items-center">
-              View Pricing
-              <BookOpen className="ml-2 w-5 h-5 group-hover:rotate-12 transition-transform" />
+                View Pricing
+                <BookOpen className="ml-2 w-5 h-5 group-hover:rotate-12 transition-transform" />
               </span>
               <span className="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-700 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
-              </button>
-
-            
+            </button>
           </div>
         </div>
       </div>
 
-      {/* 3D Scroll indicator */}
-      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20 perspective-container">
-        <div className="float-3d">
+      {/* 3D Scroll indicator - SIMPLIFIED ON MOBILE */}
+      <div className={`absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20 ${!isMobile ? 'perspective-container' : ''}`}>
+        <div className={!isMobile ? 'float-3d' : ''}>
           <div className="w-6 h-10 border-2 border-white/40 rounded-full flex items-start justify-center p-2 glass">
             <div className="w-1 h-3 bg-gradient-to-b from-orange-400 to-purple-500 rounded-full animate-pulse"></div>
           </div>
         </div>
       </div>
-
-      
     </section>
   );
 };
