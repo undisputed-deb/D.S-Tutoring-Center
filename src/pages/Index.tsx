@@ -24,51 +24,60 @@ const LoadingSection = () => (
 const Index = () => {
   return (
     <div className="min-h-screen">
-      {/* Navigation and Hero load immediately (not lazy) */}
+      {/* 1. Navigation */}
       <Navigation />
+      
+      {/* 2. Hero */}
       <Hero />
       
-      {/* All other sections load when you scroll to them */}
-      <div id="why-choose">
-        <Suspense fallback={<LoadingSection />}>
-          <WhyChoose />
-        </Suspense>
-      </div>
+      {/* 3. Reviews */}
+      <Reviews />
       
+      {/* 4. Profile Image */}
       <Suspense fallback={<LoadingSection />}>
         <ProfileImage />
       </Suspense>
       
+      {/* 5. About Me */}
       <Suspense fallback={<LoadingSection />}>
         <About />
       </Suspense>
       
+      {/* 6. Programs */}
       <div id="programs">
         <Suspense fallback={<LoadingSection />}>
           <Programs />
         </Suspense>
       </div>
       
-      {/* Reviews Section - Shows student testimonials */}
-      <Reviews />
+      {/* 7. Why Choose */}
+      <div id="why-choose">
+        <Suspense fallback={<LoadingSection />}>
+          <WhyChoose />
+        </Suspense>
+      </div>
       
+      {/* 8. Teaching Philosophy */}
       <Suspense fallback={<LoadingSection />}>
         <TeachingPhilosophy />
       </Suspense>
       
+      {/* 9. Contact Form */}
       <Suspense fallback={<LoadingSection />}>
         <ContactForm />
       </Suspense>
       
+      {/* 10. Commitment */}
       <Suspense fallback={<LoadingSection />}>
         <Commitment />
       </Suspense>
       
+      {/* 11. Pricing */}
       <Suspense fallback={<LoadingSection />}>
         <Pricing />
       </Suspense>
       
-      {/* Footer loads immediately */}
+      {/* 12. Footer */}
       <Footer />
     </div>
   );
