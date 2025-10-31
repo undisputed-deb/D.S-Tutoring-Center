@@ -631,3 +631,55 @@ All colors MUST be HSL.
     transform: none !important;
   }
 }
+/* ===================================
+   ULTRA-MINIMAL MOBILE OPTIMIZATIONS
+   =================================== */
+
+@media (max-width: 768px) {
+  /* Kill ALL animations */
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  /* Remove all transforms */
+  * {
+    transform: none !important;
+  }
+  
+  /* Reduce blur */
+  .blur-3xl,
+  .blur-2xl,
+  .blur-xl {
+    filter: none !important;
+  }
+  
+  /* Remove perspective */
+  .perspective-container {
+    perspective: none !important;
+  }
+  
+  /* Static grain */
+  .grain {
+    opacity: 0.2 !important;
+  }
+  
+  /* Allow ONLY button hover states */
+  button {
+    transition: opacity 0.2s ease !important;
+  }
+  
+  button:active {
+    opacity: 0.8;
+  }
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

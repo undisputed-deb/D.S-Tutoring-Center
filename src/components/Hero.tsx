@@ -37,9 +37,9 @@ export const Hero = () => {
     }
   };
 
-  // Advanced parallax scrolling with 3D depth - DISABLED ON MOBILE
+  // Advanced parallax scrolling - DESKTOP ONLY
   useEffect(() => {
-    if (isMobile) return; // Skip parallax on mobile
+    if (isMobile) return;
     
     let ticking = false;
 
@@ -75,9 +75,9 @@ export const Hero = () => {
     return () => window.removeEventListener("scroll", requestTick);
   }, [isMobile]);
 
-  // Mouse parallax effect for 3D depth - DISABLED ON MOBILE
+  // Mouse parallax effect - DESKTOP ONLY
   useEffect(() => {
-    if (isMobile) return; // Skip mouse effects on mobile
+    if (isMobile) return;
     
     const handleMouseMove = (e: MouseEvent) => {
       const mouseX = e.clientX / window.innerWidth - 0.5;
@@ -87,7 +87,6 @@ export const Hero = () => {
         heroContentRef.current.style.transform = `perspective(1000px) rotateY(${mouseX * 5}deg) rotateX(${-mouseY * 5}deg)`;
       }
 
-      // Move floating orbs based on mouse
       const orbs = document.querySelectorAll(".morph-shape");
       orbs.forEach((orb, index) => {
         const speed = (index + 1) * 10;
@@ -100,8 +99,10 @@ export const Hero = () => {
     return () => document.removeEventListener("mousemove", handleMouseMove);
   }, [isMobile]);
 
-  // Generate floating particles - REDUCED ON MOBILE
+  // Particles - DESKTOP ONLY (0 particles on mobile!)
   useEffect(() => {
+    if (isMobile) return; // NO particles on mobile at all
+    
     const createParticle = () => {
       if (!particleContainerRef.current) return;
 
@@ -128,12 +129,9 @@ export const Hero = () => {
       }, duration * 1000);
     };
 
-    // Reduce particles on mobile
-    const particleCount = isMobile ? 5 : 20;
-    const interval = setInterval(createParticle, isMobile ? 1000 : 500);
+    const interval = setInterval(createParticle, 500);
 
-    // Initial particles
-    for (let i = 0; i < particleCount; i++) {
+    for (let i = 0; i < 20; i++) {
       setTimeout(createParticle, i * 100);
     }
 
@@ -145,112 +143,120 @@ export const Hero = () => {
       id="hero"
       className={`relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 ${!isMobile ? 'perspective-container' : ''}`}
     >
-      {/* Multi-layer parallax background - DISABLED ON MOBILE */}
-      <div className={isMobile ? "" : "parallax-layer parallax-bg"} ref={parallaxBgRef}>
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/50 via-purple-900/30 to-slate-900/50"></div>
-      </div>
+      {/* Background layers - NO PARALLAX ON MOBILE */}
+      {!isMobile ? (
+        <>
+          <div className="parallax-layer parallax-bg" ref={parallaxBgRef}>
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-900/50 via-purple-900/30 to-slate-900/50"></div>
+          </div>
 
-      {/* Animated 3D orbs in mid layer - SIMPLIFIED ON MOBILE */}
-      <div className={isMobile ? "" : "parallax-layer parallax-mid"} ref={parallaxMidRef}>
-        <div className={`absolute top-1/4 left-1/4 w-96 h-96 ${!isMobile ? 'morph-shape' : ''}`}>
-          <div className={`w-full h-full bg-gradient-to-br from-orange-500/20 to-purple-600/20 ${isMobile ? 'blur-xl' : 'blur-3xl'} animate-pulse`}></div>
+          <div className="parallax-layer parallax-mid" ref={parallaxMidRef}>
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 morph-shape">
+              <div className="w-full h-full bg-gradient-to-br from-orange-500/20 to-purple-600/20 blur-3xl animate-pulse"></div>
+            </div>
+            <div
+              className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] morph-shape"
+              style={{ animationDelay: "2s" }}
+            >
+              <div className="w-full h-full bg-gradient-to-tr from-blue-500/20 to-indigo-600/20 blur-3xl animate-pulse"></div>
+            </div>
+            <div
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] morph-shape"
+              style={{ animationDelay: "4s" }}
+            >
+              <div className="w-full h-full bg-gradient-to-bl from-purple-500/15 to-pink-600/15 blur-3xl animate-pulse"></div>
+            </div>
+          </div>
+
+          <div className="parallax-layer parallax-front" ref={parallaxFrontRef}></div>
+        </>
+      ) : (
+        // MOBILE: Simple static background only
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-900/50 via-purple-900/30 to-slate-900/50"></div>
+          {/* One simple static orb for mobile */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96">
+            <div className="w-full h-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 blur-2xl"></div>
+          </div>
         </div>
+      )}
+
+      {/* Particles - DESKTOP ONLY */}
+      {!isMobile && (
         <div
-          className={`absolute bottom-1/4 right-1/4 w-[500px] h-[500px] ${!isMobile ? 'morph-shape' : ''}`}
-          style={!isMobile ? { animationDelay: "2s" } : {}}
-        >
-          <div className={`w-full h-full bg-gradient-to-tr from-blue-500/20 to-indigo-600/20 ${isMobile ? 'blur-xl' : 'blur-3xl'} animate-pulse`}></div>
-        </div>
-        <div
-          className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] ${!isMobile ? 'morph-shape' : ''}`}
-          style={!isMobile ? { animationDelay: "4s" } : {}}
-        >
-          <div className={`w-full h-full bg-gradient-to-bl from-purple-500/15 to-pink-600/15 ${isMobile ? 'blur-xl' : 'blur-3xl'} animate-pulse`}></div>
-        </div>
-      </div>
+          id="particleContainer"
+          ref={particleContainerRef}
+          className="absolute inset-0 pointer-events-none"
+        ></div>
+      )}
 
-      {/* Floating particles */}
-      <div
-        className={isMobile ? "" : "parallax-layer parallax-front"}
-        ref={parallaxFrontRef}
-      ></div>
-      <div
-        id="particleContainer"
-        ref={particleContainerRef}
-        className="absolute inset-0 pointer-events-none"
-      ></div>
+      {/* Grain texture */}
+      <div className="absolute inset-0 grain pointer-events-none opacity-30"></div>
 
-      {/* Grain texture overlay */}
-      <div className="absolute inset-0 grain pointer-events-none"></div>
-
-      {/* Year markers with 3D effect - SIMPLIFIED ON MOBILE */}
+      {/* Year markers - NO ANIMATION ON MOBILE */}
       <div className={`absolute top-8 left-8 text-white/60 text-sm font-mono tracking-wider z-20 ${!isMobile ? 'float-3d' : ''}`}>
-        <span className="shimmer-effect">2025</span>
+        <span className={!isMobile ? 'shimmer-effect' : ''}>2025</span>
       </div>
-      <div
-        className={`absolute top-8 right-8 text-white/60 text-sm font-mono tracking-wider z-20 ${!isMobile ? 'float-3d' : ''}`}
-        style={!isMobile ? { animationDelay: "0.5s" } : {}}
-      >
-        <span className="shimmer-effect">NYC</span>
+      <div className={`absolute top-8 right-8 text-white/60 text-sm font-mono tracking-wider z-20 ${!isMobile ? 'float-3d' : ''}`}>
+        <span className={!isMobile ? 'shimmer-effect' : ''}>NYC</span>
       </div>
 
-      {/* Floating Stats Cards - Left Side */}
-      <div className="absolute left-8 top-1/2 -translate-y-1/2 z-20 hidden lg:block">
-        <div
-          className="space-y-6 opacity-0"
-          style={{ animation: "fade-in-up 1s ease-out 1.2s forwards" }}
-        >
-          {/* Students Count */}
-          <div className={`glass p-6 rounded-2xl hover:scale-105 transition-transform duration-300 ${!isMobile ? 'float-3d' : ''}`}>
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl">
-                <Users className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <p className="text-3xl font-bold text-white">80+</p>
-                <p className="text-white/70 text-sm">Active Students</p>
+      {/* Floating Stats Cards - DESKTOP ONLY */}
+      {!isMobile && (
+        <div className="absolute left-8 top-1/2 -translate-y-1/2 z-20 hidden lg:block">
+          <div
+            className="space-y-6 opacity-0"
+            style={{ animation: "fade-in-up 1s ease-out 1.2s forwards" }}
+          >
+            <div className="glass p-6 rounded-2xl float-3d hover:scale-105 transition-transform duration-300">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl">
+                  <Users className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <p className="text-3xl font-bold text-white">80+</p>
+                  <p className="text-white/70 text-sm">Active Students</p>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Experience */}
-          <div
-            className={`glass p-6 rounded-2xl hover:scale-105 transition-transform duration-300 ${!isMobile ? 'float-3d' : ''}`}
-            style={!isMobile ? { animationDelay: "0.2s" } : {}}
-          >
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl">
-                <Trophy className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <p className="text-3xl font-bold text-white">2.5+</p>
-                <p className="text-white/70 text-sm">Years Experience</p>
+            <div
+              className="glass p-6 rounded-2xl float-3d hover:scale-105 transition-transform duration-300"
+              style={{ animationDelay: "0.2s" }}
+            >
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl">
+                  <Trophy className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <p className="text-3xl font-bold text-white">2.5+</p>
+                  <p className="text-white/70 text-sm">Years Experience</p>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Success Rate */}
-          <div
-            className={`glass p-6 rounded-2xl hover:scale-105 transition-transform duration-300 ${!isMobile ? 'float-3d' : ''}`}
-            style={!isMobile ? { animationDelay: "0.4s" } : {}}
-          >
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl">
-                <Target className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <p className="text-3xl font-bold text-white">120%</p>
-                <p className="text-white/70 text-sm">Commitment</p>
+            <div
+              className="glass p-6 rounded-2xl float-3d hover:scale-105 transition-transform duration-300"
+              style={{ animationDelay: "0.4s" }}
+            >
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl">
+                  <Target className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <p className="text-3xl font-bold text-white">120%</p>
+                  <p className="text-white/70 text-sm">Commitment</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Main Content */}
       <div className="relative z-10 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-7xl mx-auto" ref={heroContentRef}>
-          {/* Animated title with 3D depth - SIMPLIFIED ON MOBILE */}
+          {/* Title - NO 3D EFFECT ON MOBILE */}
           <div className={`mb-8 ${!isMobile ? 'perspective-container' : ''}`}>
             <h1
               className="font-sans text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-black text-white leading-tight tracking-wide drop-shadow-2xl"
@@ -259,10 +265,10 @@ export const Hero = () => {
                 transformStyle: "preserve-3d",
               } : {}}
             >
-              <span className="inline-block hover:scale-110 transition-transform duration-300">
+              <span className={isMobile ? '' : 'inline-block hover:scale-110 transition-transform duration-300'}>
                 D.S
               </span>
-              <span className="inline-block hover:scale-110 transition-transform duration-300 ml-4">
+              <span className={`ml-4 ${isMobile ? '' : 'inline-block hover:scale-110 transition-transform duration-300'}`}>
                 TUTORING
               </span>
               <span className="block mt-4 relative">
@@ -270,76 +276,85 @@ export const Hero = () => {
                   <span className="relative z-10 bg-gradient-to-r from-orange-400 via-purple-500 to-blue-500 bg-clip-text text-transparent gradient-animated">
                     CENTER
                   </span>
-                  {/* 3D glow effect */}
-                  <span className="absolute inset-0 bg-gradient-to-r from-orange-500 via-purple-500 to-blue-500 opacity-50 blur-2xl -z-10 animate-pulse"></span>
+                  {!isMobile && (
+                    <span className="absolute inset-0 bg-gradient-to-r from-orange-500 via-purple-500 to-blue-500 opacity-50 blur-2xl -z-10 animate-pulse"></span>
+                  )}
                 </span>
               </span>
             </h1>
           </div>
 
-          {/* Subtitle with fade-in animation */}
+          {/* Subtitle - SIMPLE FADE ON MOBILE */}
           <p
-            className="font-sans text-xl sm:text-2xl lg:text-3xl text-white/90 mb-4 max-w-4xl mx-auto font-light tracking-wide drop-shadow-lg opacity-0"
-            style={{ animation: "fade-in-up 1s ease-out 0.5s forwards" }}
+            className={`font-sans text-xl sm:text-2xl lg:text-3xl text-white/90 mb-4 max-w-4xl mx-auto font-light tracking-wide drop-shadow-lg ${isMobile ? '' : 'opacity-0'}`}
+            style={!isMobile ? { animation: "fade-in-up 1s ease-out 0.5s forwards" } : {}}
           >
             Transform your academic journey with personalized tutoring that
             delivers results
           </p>
 
-          {/* Tagline with typing effect */}
+          {/* Tagline */}
           <p
-            className="font-mono text-sm sm:text-base lg:text-lg text-white/70 mb-12 uppercase tracking-widest font-semibold opacity-0"
-            style={{ animation: "fade-in-up 1s ease-out 0.7s forwards" }}
+            className={`font-mono text-sm sm:text-base lg:text-lg text-white/70 mb-12 uppercase tracking-widest font-semibold ${isMobile ? '' : 'opacity-0'}`}
+            style={!isMobile ? { animation: "fade-in-up 1s ease-out 0.7s forwards" } : {}}
           >
-            <span className="shimmer-effect">Building Bright Futures</span>
+            <span className={!isMobile ? 'shimmer-effect' : ''}>Building Bright Futures</span>
           </p>
 
-          {/* 3D Buttons */}
+          {/* Buttons - NO FANCY EFFECTS ON MOBILE */}
           <div
-            className="flex flex-col sm:flex-row gap-6 justify-center items-center opacity-0"
-            style={{ animation: "fade-in-up 1s ease-out 0.9s forwards" }}
+            className={`flex flex-col sm:flex-row gap-6 justify-center items-center ${isMobile ? '' : 'opacity-0'}`}
+            style={!isMobile ? { animation: "fade-in-up 1s ease-out 0.9s forwards" } : {}}
           >
             <button
               onClick={() => scrollToSection("programs")}
-              className={`group relative px-10 py-6 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold text-lg rounded-full shadow-2xl hover:shadow-orange-500/50 transform hover:scale-105 transition-all duration-300 neon-button ${!isMobile ? 'perspective-container' : ''}`}
+              className={`group relative px-10 py-6 bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold text-lg rounded-full shadow-2xl transform transition-all duration-300 ${!isMobile ? 'hover:shadow-orange-500/50 hover:scale-105 neon-button perspective-container' : ''}`}
             >
               <span className="relative z-10 flex items-center">
                 Get Started Today
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-2 transition-transform" />
+                <ArrowRight className={`ml-2 w-5 h-5 ${!isMobile ? 'group-hover:translate-x-2 transition-transform' : ''}`} />
               </span>
-              <span className="absolute inset-0 bg-gradient-to-r from-orange-600 to-orange-700 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+              {!isMobile && (
+                <span className="absolute inset-0 bg-gradient-to-r from-orange-600 to-orange-700 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+              )}
             </button>
 
             <button
               onClick={toggleWhyChoose}
-              className="group relative px-10 py-6 glass text-white font-bold text-lg rounded-full shadow-xl hover:shadow-white/20 transform hover:scale-105 transition-all duration-300 border-2 border-white/30 hover:border-white/60"
+              className={`group relative px-10 py-6 glass text-white font-bold text-lg rounded-full shadow-xl transform transition-all duration-300 border-2 border-white/30 ${!isMobile ? 'hover:shadow-white/20 hover:scale-105 hover:border-white/60' : ''}`}
             >
               <span className="relative z-10">Learn More</span>
-              <span className="absolute inset-0 bg-white/10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+              {!isMobile && (
+                <span className="absolute inset-0 bg-white/10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+              )}
             </button>
 
             <button
               onClick={() => scrollToSection("pricing")}
-              className={`group relative px-10 py-6 bg-gradient-to-r from-purple-500 to-purple-600 text-white font-bold text-lg rounded-full shadow-2xl hover:shadow-purple-500/50 transform hover:scale-105 transition-all duration-300 neon-button ${!isMobile ? 'perspective-container' : ''}`}
+              className={`group relative px-10 py-6 bg-gradient-to-r from-purple-500 to-purple-600 text-white font-bold text-lg rounded-full shadow-2xl transform transition-all duration-300 ${!isMobile ? 'hover:shadow-purple-500/50 hover:scale-105 neon-button perspective-container' : ''}`}
             >
               <span className="relative z-10 flex items-center">
                 View Pricing
-                <BookOpen className="ml-2 w-5 h-5 group-hover:rotate-12 transition-transform" />
+                <BookOpen className={`ml-2 w-5 h-5 ${!isMobile ? 'group-hover:rotate-12 transition-transform' : ''}`} />
               </span>
-              <span className="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-700 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+              {!isMobile && (
+                <span className="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-700 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+              )}
             </button>
           </div>
         </div>
       </div>
 
-      {/* 3D Scroll indicator - SIMPLIFIED ON MOBILE */}
-      <div className={`absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20 ${!isMobile ? 'perspective-container' : ''}`}>
-        <div className={!isMobile ? 'float-3d' : ''}>
-          <div className="w-6 h-10 border-2 border-white/40 rounded-full flex items-start justify-center p-2 glass">
-            <div className="w-1 h-3 bg-gradient-to-b from-orange-400 to-purple-500 rounded-full animate-pulse"></div>
+      {/* Scroll indicator - DESKTOP ONLY */}
+      {!isMobile && (
+        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20 perspective-container">
+          <div className="float-3d">
+            <div className="w-6 h-10 border-2 border-white/40 rounded-full flex items-start justify-center p-2 glass">
+              <div className="w-1 h-3 bg-gradient-to-b from-orange-400 to-purple-500 rounded-full animate-pulse"></div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </section>
   );
 };
