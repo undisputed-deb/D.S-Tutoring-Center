@@ -3,7 +3,56 @@
 import { Card } from "@/components/ui/card";
 import { Heart, Ear, Users2, Zap, TrendingUp } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, memo } from "react";
+
+// Memoized Commitment Card
+const CommitmentCard = memo(({ item, index }: { item: any; index: number }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="h-full"
+    >
+      <Card className="group relative p-6 bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm hover:shadow-2xl transition-all duration-500 border-2 border-white/30 overflow-hidden h-full">
+        
+        {/* Gradient overlay on hover */}
+        {isHovered && (
+          <motion.div 
+            className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-80`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.8 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          />
+        )}
+
+        {/* Subtle glow effect */}
+        <div className={`absolute -inset-1 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500`}></div>
+
+        <div className="relative flex items-start gap-4">
+          <motion.div 
+            className={`flex-shrink-0 w-12 h-12 bg-gradient-to-br ${item.gradient} rounded-xl flex items-center justify-center shadow-lg`}
+            whileHover={{ scale: 1.1 }}
+            transition={{ duration: 0.2 }}
+          >
+            <item.icon className="w-6 h-6 text-white" />
+          </motion.div>
+          <p className="text-slate-800 dark:text-white group-hover:text-white leading-relaxed pt-2 font-medium transition-colors duration-300">
+            {item.text}
+          </p>
+        </div>
+      </Card>
+    </motion.div>
+  );
+});
+
+CommitmentCard.displayName = "CommitmentCard";
 
 export const Commitment = () => {
   const sectionRef = useRef(null);
@@ -13,7 +62,6 @@ export const Commitment = () => {
     offset: ["start end", "end start"],
   });
 
-  const parallaxY = useTransform(scrollYProgress, [0, 1], [-30, 30]);
   const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
 
   const commitments = [
@@ -44,96 +92,20 @@ export const Commitment = () => {
     }
   ];
 
-  const CommitmentCard = ({ item, index }: { item: any; index: number }) => {
-    const cardRef = useRef<HTMLDivElement>(null);
-    const [rotateX, setRotateX] = useState(0);
-    const [rotateY, setRotateY] = useState(0);
-
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-      if (!cardRef.current) return;
-
-      const rect = cardRef.current.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      const mouseX = e.clientX - centerX;
-      const mouseY = e.clientY - centerY;
-
-      const rotateXValue = (mouseY / rect.height) * -10;
-      const rotateYValue = (mouseX / rect.width) * 10;
-
-      setRotateX(rotateXValue);
-      setRotateY(rotateYValue);
-    };
-
-    const handleMouseLeave = () => {
-      setRotateX(0);
-      setRotateY(0);
-    };
-
-    return (
-      <motion.div
-        ref={cardRef}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        style={{
-          rotateX,
-          rotateY,
-          transformStyle: "preserve-3d",
-        }}
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: index * 0.1 }}
-        whileHover={{ scale: 1.05, z: 30 }}
-        className="h-full"
-      >
-        <Card className="group relative p-6 bg-white/10 backdrop-blur-xl hover:shadow-2xl transition-all duration-500 border-2 border-white/20 hover:border-transparent overflow-hidden h-full">
-          
-          {/* Glassmorphism background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-md"></div>
-
-          {/* Gradient overlay on hover */}
-          <motion.div 
-            className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-80 transition-opacity duration-700`}
-          ></motion.div>
-
-          {/* Glow effect */}
-          <div className={`absolute -inset-1 bg-gradient-to-r ${item.gradient} opacity-0 group-hover:opacity-20 blur-2xl transition-opacity duration-700`}></div>
-
-          <div className="relative flex items-start gap-4" style={{ transform: "translateZ(30px)" }}>
-            <motion.div 
-              className={`flex-shrink-0 w-12 h-12 bg-gradient-to-br ${item.gradient} rounded-xl flex items-center justify-center shadow-lg`}
-              whileHover={{ rotate: 360, scale: 1.1 }}
-              transition={{ duration: 0.6 }}
-              style={{ transform: "translateZ(50px)" }}
-            >
-              <item.icon className="w-6 h-6 text-white" />
-            </motion.div>
-            <p className="text-slate-900 dark:text-white group-hover:text-white leading-relaxed pt-2 font-medium drop-shadow-md transition-colors duration-500">
-              {item.text}
-            </p>
-          </div>
-        </Card>
-      </motion.div>
-    );
-  };
-
   return (
     <section 
       ref={sectionRef}
       className="relative py-24 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 overflow-hidden"
     >
-      {/* Animated background orbs */}
-      <div className="absolute inset-0 overflow-hidden">
+      {/* Simplified animated background - only 2 orbs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           className="absolute top-1/4 left-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl"
           animate={{
-            scale: [1, 1.3, 1],
-            x: [-30, 30, -30],
-            y: [-30, 30, -30],
+            scale: [1, 1.2, 1],
           }}
           transition={{
-            duration: 12,
+            duration: 10,
             repeat: Infinity,
             ease: "easeInOut"
           }}
@@ -141,39 +113,14 @@ export const Commitment = () => {
         <motion.div
           className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"
           animate={{
-            scale: [1.3, 1, 1.3],
-            x: [30, -30, 30],
-            y: [30, -30, 30],
+            scale: [1.2, 1, 1.2],
           }}
           transition={{
-            duration: 15,
+            duration: 12,
             repeat: Infinity,
             ease: "easeInOut"
           }}
         />
-      </div>
-
-      {/* Floating particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(15)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 bg-white/20 rounded-full"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              y: [-20, -100],
-              opacity: [0, 0.5, 0],
-            }}
-            transition={{
-              duration: 3 + Math.random() * 3,
-              repeat: Infinity,
-              delay: Math.random() * 5,
-            }}
-          />
-        ))}
       </div>
 
       <motion.div 
@@ -186,88 +133,41 @@ export const Commitment = () => {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.6 }}
           >
             <div className="inline-block mb-6">
-              <motion.div 
-                className="flex items-center gap-3 bg-pink-500/20 backdrop-blur-sm px-6 py-3 rounded-full border-2 border-pink-400/30"
-                whileHover={{ scale: 1.05 }}
-              >
-                <motion.div
-                  animate={{
-                    scale: [1, 1.2, 1],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                >
-                  <Heart className="w-6 h-6 text-pink-400" />
-                </motion.div>
+              <div className="flex items-center gap-3 bg-pink-500/20 backdrop-blur-sm px-6 py-3 rounded-full border-2 border-pink-400/30">
+                <Heart className="w-6 h-6 text-pink-400" />
                 <span className="text-pink-300 font-semibold">My Commitment</span>
-              </motion.div>
+              </div>
             </div>
             
-            <motion.h2 
-              className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight"
-              animate={{
-                textShadow: [
-                  "0 0 20px rgba(236, 72, 153, 0.5)",
-                  "0 0 40px rgba(236, 72, 153, 0.8)",
-                  "0 0 20px rgba(236, 72, 153, 0.5)",
-                ],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            >
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
               Try Just 1-2 Classes -<br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-500">You'll See Why I'm The Best Choice</span>
-            </motion.h2>
+            </h2>
             
             <p className="text-xl text-white/80">
               For Your Child's Success
             </p>
           </motion.div>
 
-          <motion.div
-            className="grid sm:grid-cols-2 gap-6 mb-12"
-            style={{ y: parallaxY }}
-          >
+          <div className="grid sm:grid-cols-2 gap-6 mb-12">
             {commitments.map((item, index) => (
               <CommitmentCard key={index} item={item} index={index} />
             ))}
-          </motion.div>
+          </div>
 
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.6 }}
             className="relative"
           >
-            <motion.div
-              className="absolute inset-0 rounded-3xl"
-              style={{
-                background: "linear-gradient(135deg, #ec4899, #8b5cf6, #3b82f6)",
-                backgroundSize: "300% 300%",
-              }}
-              animate={{
-                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-              }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: "linear"
-              }}
-            >
-              <div className="absolute inset-[2px] rounded-3xl bg-gradient-to-br from-pink-600 via-purple-600 to-blue-600"></div>
-            </motion.div>
+            <div className="absolute inset-0 bg-gradient-to-r from-pink-600 via-purple-600 to-blue-600 rounded-3xl blur-sm" />
 
-            <Card className="relative bg-transparent text-white p-10 sm:p-12 text-center shadow-2xl border-0">
+            <Card className="relative bg-gradient-to-br from-pink-600 via-purple-600 to-blue-600 text-white p-10 sm:p-12 text-center shadow-2xl border-0">
               <h3 className="text-3xl sm:text-4xl font-bold mb-4">
                 Experience the Difference
               </h3>

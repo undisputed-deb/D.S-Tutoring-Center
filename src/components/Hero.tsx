@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, BookOpen, Target, Trophy, Users } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { ArrowRight, BookOpen, Target, Trophy, Users, Star } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+
 
 export const Hero = () => {
   const heroContentRef = useRef<HTMLDivElement>(null);
@@ -8,6 +9,9 @@ export const Hero = () => {
   const parallaxBgRef = useRef<HTMLDivElement>(null);
   const parallaxMidRef = useRef<HTMLDivElement>(null);
   const parallaxFrontRef = useRef<HTMLDivElement>(null);
+  
+  // Review modal state
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -228,8 +232,6 @@ export const Hero = () => {
         </div>
       </div>
 
-      
-
       {/* Main Content */}
       <div className="relative z-10 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-7xl mx-auto" ref={heroContentRef}>
@@ -277,7 +279,7 @@ export const Hero = () => {
             <span className="shimmer-effect">Building Bright Futures</span>
           </p>
 
-          {/* 3D Buttons */}
+          {/* 3D Buttons with Review Button */}
           <div
             className="flex flex-col sm:flex-row gap-6 justify-center items-center opacity-0"
             style={{ animation: "fade-in-up 1s ease-out 0.9s forwards" }}
@@ -300,6 +302,8 @@ export const Hero = () => {
               <span className="relative z-10">Learn More</span>
               <span className="absolute inset-0 bg-white/10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
             </button>
+
+            
           </div>
         </div>
       </div>
@@ -312,6 +316,7 @@ export const Hero = () => {
           </div>
         </div>
       </div>
+
       
     </section>
   );
