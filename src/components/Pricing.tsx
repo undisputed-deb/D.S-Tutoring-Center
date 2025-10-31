@@ -40,9 +40,10 @@ export const Pricing = () => {
 
   return (
     <section 
-      ref={sectionRef}
-      className="relative py-24 bg-gradient-to-br from-slate-900 via-emerald-900 to-slate-900 overflow-hidden"
-    >
+  id="pricing"
+  ref={sectionRef}
+  className="relative py-24 bg-gradient-to-br from-slate-900 via-emerald-900 to-slate-900 overflow-hidden"
+>
       {/* Simplified animated background - only 2 orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div

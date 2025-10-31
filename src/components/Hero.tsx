@@ -303,6 +303,17 @@ export const Hero = () => {
               <span className="absolute inset-0 bg-white/10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
             </button>
 
+            <button
+              onClick={() => scrollToSection("pricing")}
+              className="group relative px-10 py-6 bg-gradient-to-r from-purple-500 to-purple-600 text-white font-bold text-lg rounded-full shadow-2xl hover:shadow-purple-500/50 transform hover:scale-105 transition-all duration-300 neon-button perspective-container"
+            >
+              <span className="relative z-10 flex items-center">
+              View Pricing
+              <BookOpen className="ml-2 w-5 h-5 group-hover:rotate-12 transition-transform" />
+              </span>
+              <span className="absolute inset-0 bg-gradient-to-r from-purple-600 to-purple-700 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+              </button>
+
             
           </div>
         </div>
