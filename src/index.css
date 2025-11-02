@@ -683,3 +683,84 @@ All colors MUST be HSL.
     transition: none !important;
   }
 }
+/* ===================================
+   MINIMAL SITE - NO HEAVY ANIMATIONS
+   =================================== */
+
+/* Keep only simple, performant transitions */
+* {
+  /* Remove all keyframe animations */
+  animation: none !important;
+}
+
+/* Allow only essential transitions */
+button,
+a,
+.glass {
+  transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+/* Remove parallax classes */
+.parallax-layer,
+.parallax-bg,
+.parallax-mid,
+.parallax-front {
+  transform: none !important;
+  animation: none !important;
+}
+
+/* Remove morphing shapes */
+.morph-shape {
+  animation: none !important;
+  transform: none !important;
+}
+
+/* Remove floating effects */
+.float-3d {
+  animation: none !important;
+}
+
+/* Remove perspective effects */
+.perspective-container {
+  perspective: none !important;
+}
+
+/* Remove shimmer effects */
+.shimmer-effect {
+  animation: none !important;
+}
+
+/* Remove gradient animations */
+.gradient-animated {
+  animation: none !important;
+}
+
+/* Remove neon button effects */
+.neon-button {
+  animation: none !important;
+}
+
+/* Static grain */
+.grain {
+  opacity: 0.15;
+  animation: none !important;
+}
+
+/* Keep basic hover states for usability */
+button:hover,
+a:hover {
+  transform: scale(1.05);
+}
+
+button:active,
+a:active {
+  transform: scale(0.98);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
