@@ -25,3 +25,15 @@ dist-ssr
 .env
 .env.local
 .env.*.local
+
+# Next.js
+.next/
+out/
+build/
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Vercel
+.vercel
