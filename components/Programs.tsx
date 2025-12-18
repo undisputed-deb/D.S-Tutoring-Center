@@ -22,6 +22,7 @@ const programs: Program[] = [
     desc:
       "I take a systematic, no-cramming approach to State Tests for both Math and ELA. For Math, I give the concept, logic and formulas first, understand the logic behind them, and then drill actual test questions until they're second nature and then rest of the stuffs is homework. For ELA, we break down reading strategies and deconstruct exactly what makes a high-scoring written answer. My method is simple: we build a strong foundation and practice every topic until it's perfected, so you walk in with total confidence.",
     accent: "electric",
+    link: "/state-test-prep-nyc",
   },
   {
     id: "shsat",

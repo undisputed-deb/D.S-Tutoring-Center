@@ -5,10 +5,16 @@ import { motion } from "framer-motion";
 
 const subjects = [
   {
+    title: "State Test Prep NYC",
+    description: "NYS Math & ELA for grades 3-8",
+    href: "/state-test-prep-nyc",
+    gradient: "electric",
+  },
+  {
     title: "Math Tutor NYC",
     description: "Algebra, Geometry, Calculus & more",
     href: "/math-tutor-nyc",
-    gradient: "electric",
+    gradient: "purple",
   },
   {
     title: "SAT Tutor NYC",

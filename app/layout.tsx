@@ -21,16 +21,17 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Math Tutor NYC | SAT, SHSAT & Science Tutoring | D.S Tutoring Center",
+  title: "D.S Tutoring Center - Math, State Test, Regents, SAT & SHSAT Tutor NYC",
   description:
-    "Best math, SAT, SHSAT, Regents, and science tutor in NYC. 95% success rate. Free trial available. Expert 1-on-1 tutoring for State Tests.",
+    "D.S Tutoring Center, premier NYC tutoring center with 95% success rate. Expert tutoring for Math, State Tests, SAT, SHSAT & Regents Exams. Free trial available.",
   keywords: [
+    "D.S Tutoring Center",
     "math tutor NYC",
+    "State test prep tutor NYC",
     "SAT tutor NYC",
     "SHSAT prep tutor NYC",
-    "science tutor NYC",
     "Regents tutoring NYC",
-    "State test prep tutor NYC",
+    "science tutor NYC",
     "geometry tutor NYC",
     "algebra tutor NYC",
     "chemistry tutor NYC",
