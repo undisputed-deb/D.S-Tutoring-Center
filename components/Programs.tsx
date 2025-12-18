@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 type Program = {
   id: string;
@@ -9,6 +10,7 @@ type Program = {
   subtitle: string;
   desc: string;
   accent: "electric" | "fire" | "neon" | "purple";
+  link?: string;
 };
 
 const programs: Program[] = [
@@ -29,6 +31,7 @@ const programs: Program[] = [
     desc:
       "The SHSAT is an elimination exam that demands absolute dedication from both student and teacher. This exam has 2 modules (Math + ELA), each with 2 parts. I teach the complete curriculum, extensive time management strategies, exam circumstances handling, and the smart approach: take questions first, then tackle the harder ones. I strictly follow the SHSAT handbook because the administration consistently uses similar question patterns. Formula mastery → Logic building → Examples → In-class practice → Practice test homework. Alignment and commitment = Success.",
     accent: "fire",
+    link: "/shsat-prep-tutor-nyc",
   },
   {
     id: "sat",
@@ -38,6 +41,7 @@ const programs: Program[] = [
     desc:
       "My SAT Preparation service is your complete gateway to top colleges, as a high score opens critical doors to selective schools, scholarships, and optimal course placement. I provide comprehensive, one-on-one coaching for both the digital Reading/Writing and the adaptive Math sections. We deconstruct the test using a proven, systematic 5-step math method: first, we achieve formula mastery so you know them cold; next, we focus on logic building to understand how the test-makers think; then, we walk through in-depth examples to spot common traps. This is followed by in-class practice where I correct mistakes in real-time, and it's finalized with practice test homework using the best resources. We apply this same rigor to Reading/Writing, mastering grammar and critical reading strategies. I also guide the Common App, personal essay, and extracurricular strategy.",
     accent: "neon",
+    link: "/sat-tutor-nyc",
   },
   {
     id: "regents",
@@ -47,6 +51,7 @@ const programs: Program[] = [
     desc:
       "These are the scores every college will see. I cover all key subjects: Algebra 1, Algebra 2, Geometry, ELA, Chemistry, Physics, Living Environment, and Earth Science. My proven 5-step method builds mastery: we master core concepts, build logic, and walk through examples. Top priority is practice: lots of Regents packet practice together in class, and targeted homework using real past Regents exams. We don't just pass — we excel.",
     accent: "purple",
+    link: "/regents-tutoring-nyc",
   },
   {
     id: "ap",
@@ -113,6 +118,13 @@ function ProgramBlock({ program, index }: { program: Program; index: number }) {
         <p className="mt-4 text-white/80" style={{ lineHeight: 1.7 }}>
           {program.desc}
         </p>
+        {program.link && (
+          <div className="mt-6">
+            <Link href={program.link} className="btn btn-outline">
+              LEARN MORE
+            </Link>
+          </div>
+        )}
       </div>
     </motion.article>
   );

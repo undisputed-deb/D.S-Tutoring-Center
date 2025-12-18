@@ -45,6 +45,9 @@ const Footer = dynamic(() => import("@/components/Footer"), {
   loading: () => <div className="h-24 border-t border-white/10" />,
 });
 const CustomCursor = dynamic(() => import("@/components/CustomCursor"));
+const SubjectLinks = dynamic(() => import("@/components/SubjectLinks"), {
+  loading: () => <PlaceholderSection label="SUBJECTS" />,
+});
 
 function PlaceholderSection({ label }: { label: string }) {
   return (
@@ -63,6 +66,7 @@ export default function Home() {
       <CustomCursor />
       <Hero />
       <StickyStatsBar />
+      <SubjectLinks />
       <About />
       <Testimonials />
       <Programs />

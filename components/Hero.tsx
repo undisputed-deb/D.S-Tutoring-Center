@@ -51,7 +51,7 @@ export default function Hero() {
             variants={container}
           >
             <motion.div variants={item} className="mb-6 text-sm tracking-[0.2em] text-white/60">
-              NYC TUTORING
+              NYC TUTORING CENTER
             </motion.div>
 
             {/* Massive stacked title */}
@@ -61,19 +61,25 @@ export default function Hero() {
                 className="font-black text-balance"
                 style={{ fontSize: "clamp(3rem, 10vw, 8rem)" }}
               >
-                <span className="block">D.S</span>
-                <span className="block">TUTORING</span>
-                <span className="block text-outline">CENTER</span>
+                <span className="block">MATH, SAT</span>
+                <span className="block">& SHSAT</span>
+                <span className="block text-outline">TUTOR NYC</span>
               </motion.h1>
             </div>
 
+            <motion.h2
+              variants={item}
+              className="mt-6 text-2xl md:text-3xl font-bold text-gradient-electric"
+            >
+              Expert Tutoring for Math, Science, SAT, SHSAT & Regents Exams
+            </motion.h2>
+
             <motion.p
               variants={item}
-              className="mt-6 max-w-xl text-balance text-white/70"
+              className="mt-4 max-w-xl text-balance text-white/70"
               style={{ fontSize: "clamp(1rem, 2vw, 1.25rem)", lineHeight: 1.6 }}
             >
-              Excellence in Education. NYC-based, dedicated tutoring with a
-              relentless focus on fundamentals, practice, and mastery.
+              Premier NYC tutoring center with 95% success rate. Specialized in Math, SAT prep, SHSAT prep, Science (Chemistry, Physics, Biology), and all Regents exams. Free trial available.
             </motion.p>
 
             {/* CTAs */}
