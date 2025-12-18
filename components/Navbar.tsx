@@ -4,13 +4,14 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 const links: Array<{ href: string; label: string }> = [
-  { href: "#programs", label: "Programs" },
-  { href: "#about", label: "About" },
-  { href: "#testimonials", label: "Testimonials" },
-  { href: "#pricing", label: "Pricing" },
-  { href: "#faq", label: "FAQ" },
+  { href: "/#programs", label: "Programs" },
+  { href: "/#about", label: "About" },
+  { href: "/#testimonials", label: "Testimonials" },
+  { href: "/#pricing", label: "Pricing" },
+  { href: "/#faq", label: "FAQ" },
 ];
 
 export default function Navbar() {
@@ -61,7 +62,7 @@ export default function Navbar() {
             } px-4 md:px-6 py-3 transition-colors`}
           >
             {/* Left: Logo */}
-            <a href="#" className="flex items-center">
+            <Link href="/" className="flex items-center">
               <span className="sr-only">D.S Tutoring Center</span>
               <Image
                 src="/D.S Tutoring Center Logo.jpeg"
@@ -71,26 +72,26 @@ export default function Navbar() {
                 className="h-10 w-auto md:h-12"
                 priority
               />
-            </a>
+            </Link>
 
             {/* Center: Links */}
             <nav className="hidden md:flex items-center gap-6">
               {links.map((l) => (
-                <a key={l.href} className="nav-link" href={l.href}>
+                <Link key={l.href} className="nav-link" href={l.href}>
                   {l.label}
-                </a>
+                </Link>
               ))}
             </nav>
 
             {/* Right: Contact CTA + Hamburger */}
             <div className="flex items-center gap-3">
-              <a
-                href="#contact"
+              <Link
+                href="/#contact"
                 className="hidden md:inline-flex btn btn-outline btn-lg"
                 aria-label="Contact D.S Tutoring Center"
               >
                 CONTACT
-              </a>
+              </Link>
               <button
                 aria-label="Open menu"
                 className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/90 hover:text-white hover:border-white/30 transition"
@@ -122,7 +123,7 @@ export default function Navbar() {
               </button>
             </div>
             <div className="flex min-h-full flex-col items-center justify-center gap-6 px-6">
-              <a href="#" className="flex items-center">
+              <Link href="/" className="flex items-center" onClick={() => setOpen(false)}>
                 <Image
                   src="/D.S Tutoring Center Logo.jpeg"
                   alt="D.S Tutoring Center Logo"
@@ -130,29 +131,33 @@ export default function Navbar() {
                   height={80}
                   className="h-20 w-auto"
                 />
-              </a>
+              </Link>
               <nav className="flex flex-col items-center gap-4">
                 {links.map((l, i) => (
-                  <motion.a
+                  <Link
                     key={l.href}
                     href={l.href}
                     className="text-2xl text-white/90 hover:text-white"
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.05 * i }}
                     onClick={() => setOpen(false)}
                   >
-                    {l.label}
-                  </motion.a>
+                    <motion.span
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ delay: 0.05 * i }}
+                      className="block"
+                    >
+                      {l.label}
+                    </motion.span>
+                  </Link>
                 ))}
               </nav>
-              <a
-                href="#contact"
+              <Link
+                href="/#contact"
                 className="mt-6 btn btn-primary-gradient btn-lg w-full max-w-xs"
                 onClick={() => setOpen(false)}
               >
                 CONTACT
-              </a>
+              </Link>
             </div>
           </motion.div>
         )}

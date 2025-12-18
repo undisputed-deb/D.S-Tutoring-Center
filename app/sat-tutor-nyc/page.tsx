@@ -214,15 +214,18 @@ export default function SATTutorPage() {
           <h2 className="text-3xl md:text-4xl font-black mb-4">Ready to Ace the SAT?</h2>
           <p className="text-xl text-white/80 mb-8">Book your FREE strategy session - I'll show you exactly how to break 1400+</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="/#contact" className="btn btn-primary-gradient btn-lg">
+            <Link href="/#contact" className="btn btn-primary-gradient btn-lg">
               BOOK FREE SESSION
-            </a>
-            <a href="/#programs" className="btn btn-outline btn-lg">
-              VIEW ALL PROGRAMS
-            </a>
-            <a href="/#pricing" className="btn btn-outline btn-lg">
-              SEE PRICING
-            </a>
+            </Link>
+            <Link href="/#about" className="btn btn-outline btn-lg">
+              ABOUT
+            </Link>
+            <Link href="/#programs" className="btn btn-outline btn-lg">
+              PROGRAMS
+            </Link>
+            <Link href="/#pricing" className="btn btn-outline btn-lg">
+              PRICING
+            </Link>
           </div>
         </div>
       </section>
