@@ -10,6 +10,8 @@ const config: Config = {
   theme: {
     extend: {}, // no themed colors mapped
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
 };
 export default config;

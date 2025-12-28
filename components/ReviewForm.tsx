@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import { supabase } from "@/lib/supabase";
 
 export default function ReviewForm() {
   const [formData, setFormData] = useState({
@@ -22,22 +21,28 @@ export default function ReviewForm() {
     setErrorMessage("");
 
     try {
-      const { error } = await supabase
-        .from("reviews")
-        .insert([
-          {
-            name: formData.name,
-            email: formData.email,
-            grade: formData.grade,
-            subject: formData.subject,
-            school: formData.school,
-            rating: formData.rating,
-            comment: formData.comment,
-            status: "pending",
-          },
-        ]);
+      // Use secure API route instead of direct Supabase call
+      const response = await fetch('/api/reviews', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          grade: formData.grade,
+          subject: formData.subject,
+          school: formData.school,
+          rating: formData.rating,
+          comment: formData.comment,
+        }),
+      });
 
-      if (error) throw error;
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to submit review');
+      }
 
       setStatus("success");
       setFormData({ name: "", email: "", grade: "", subject: "", school: "", rating: 5, comment: "" });

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import { supabase } from "@/lib/supabase";
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -20,19 +19,26 @@ export default function ContactForm() {
     setErrorMessage("");
 
     try {
-      const { error } = await supabase
-        .from("contact_submissions")
-        .insert([
-          {
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone,
-            subject: formData.subject,
-            message: formData.message,
-          },
-        ]);
+      // Use secure API route instead of direct Supabase call
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          subject: formData.subject,
+          message: formData.message,
+        }),
+      });
 
-      if (error) throw error;
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to submit form');
+      }
 
       setStatus("success");
       setFormData({ name: "", email: "", phone: "", subject: "", message: "" });

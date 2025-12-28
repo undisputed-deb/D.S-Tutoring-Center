@@ -108,6 +108,13 @@ export default function Hero() {
               >
                 REVIEWS
               </a>
+              <a
+                href="/blog"
+                className="btn btn-outline btn-lg"
+                aria-label="Read our blog"
+              >
+                BLOG
+              </a>
             </motion.div>
 
             {/* Location bottom-left of left column */}
