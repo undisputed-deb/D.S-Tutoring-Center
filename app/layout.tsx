@@ -87,7 +87,7 @@ export const metadata: Metadata = {
     apple: "/bestlogo.png",
   },
   verification: {
-    google: "your-google-verification-code-here",
+    google: "vvs4VBWV_JN10Bq42nSaTUEyj8PxMbic2PgfpLHs-Yg",
   },
 };
 
