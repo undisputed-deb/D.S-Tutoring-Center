@@ -20,13 +20,13 @@ export default function About() {
             transition={{ duration: 0.6, ease: "easeOut" }}
             className="relative"
           >
-            <div className="relative h-[300px] w-[300px] md:h-[420px] md:w-[420px] lg:h-[600px] lg:w-[600px] overflow-hidden rounded-full border border-white/15">
+            <div className="relative h-[280px] w-[280px] md:h-[360px] md:w-[360px] lg:h-[400px] lg:w-[400px] overflow-hidden rounded-full border border-white/15">
               <Image
                 src="/deb-profile.jpg"
                 alt="Deb Shrestho — Founder"
                 fill
-                sizes="(max-width: 768px) 300px, (max-width: 1024px) 420px, 600px"
-                className="object-cover grayscale hover:grayscale-0 transition duration-500 hover:scale-[1.06]"
+                sizes="(max-width: 768px) 280px, (max-width: 1024px) 360px, 400px"
+                className="object-cover"
                 priority={false}
               />
             </div>

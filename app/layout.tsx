@@ -44,9 +44,9 @@ export const metadata: Metadata = {
   authors: [{ name: "Deb Shrestho" }],
   creator: "D.S Tutoring Center",
   publisher: "D.S Tutoring Center",
-  metadataBase: new URL("https://d-s-tutoring-center.vercel.app"),
+  metadataBase: new URL("https://dstutoringcenter.company"),
   alternates: {
-    canonical: "https://d-s-tutoring-center.vercel.app",
+    canonical: "https://dstutoringcenter.company",
   },
   robots: {
     index: true,
@@ -63,13 +63,13 @@ export const metadata: Metadata = {
     title: "Math Tutor NYC | SAT, SHSAT & Science Tutoring | D.S Tutoring Center",
     description:
       "Best math, SAT, SHSAT, Regents, and science tutor in NYC. 95% success rate. Free trial available. Expert 1-on-1 tutoring.",
-    url: "https://d-s-tutoring-center.vercel.app",
+    url: "https://dstutoringcenter.company",
     siteName: "D.S Tutoring Center",
     type: "website",
     locale: "en_US",
     images: [
       {
-        url: "/D.S Tutoring Center Logo.jpeg",
+        url: "/bestlogo.png",
         width: 1200,
         height: 630,
         alt: "D.S Tutoring Center - NYC Tutoring",
@@ -80,11 +80,11 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Math Tutor NYC | SAT, SHSAT & Science Tutoring",
     description: "Best math, SAT, SHSAT, Regents, and science tutor in NYC. 95% success rate. Free trial available.",
-    images: ["/D.S Tutoring Center Logo.jpeg"],
+    images: ["/bestlogo.png"],
   },
   icons: {
-    icon: "/D.S Tutoring Center Logo.jpeg",
-    apple: "/D.S Tutoring Center Logo.jpeg",
+    icon: "/bestlogo.png",
+    apple: "/bestlogo.png",
   },
   verification: {
     google: "your-google-verification-code-here",
@@ -100,7 +100,7 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": "D.S Tutoring Center",
-    "image": "https://d-s-tutoring-center.vercel.app/D.S Tutoring Center Logo.jpeg",
+    "image": "https://dstutoringcenter.company/bestlogo.png",
     "description": "Premier tutoring center in NYC offering math, science, SAT, SHSAT, and Regents exam preparation with a 95% success rate.",
     "address": {
       "@type": "PostalAddress",
@@ -112,7 +112,7 @@ export default function RootLayout({
     },
     "telephone": "+1-917-312-6589",
     "email": "debashrestha222@gmail.com",
-    "url": "https://d-s-tutoring-center.vercel.app",
+    "url": "https://dstutoringcenter.company",
     "priceRange": "Contact for pricing",
     "areaServed": [
       {"@type": "City", "name": "New York"},

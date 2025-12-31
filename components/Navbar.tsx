@@ -65,11 +65,11 @@ export default function Navbar() {
             <Link href="/" className="flex items-center">
               <span className="sr-only">D.S Tutoring Center</span>
               <Image
-                src="/D.S Tutoring Center Logo.jpeg"
+                src="/bestlogo.png"
                 alt="D.S Tutoring Center Logo"
-                width={50}
-                height={50}
-                className="h-10 w-auto md:h-12"
+                width={60}
+                height={60}
+                className="h-12 w-auto md:h-14"
                 priority
               />
             </Link>
@@ -125,11 +125,11 @@ export default function Navbar() {
             <div className="flex min-h-full flex-col items-center justify-center gap-6 px-6">
               <Link href="/" className="flex items-center" onClick={() => setOpen(false)}>
                 <Image
-                  src="/D.S Tutoring Center Logo.jpeg"
+                  src="/bestlogo.png"
                   alt="D.S Tutoring Center Logo"
-                  width={80}
-                  height={80}
-                  className="h-20 w-auto"
+                  width={100}
+                  height={100}
+                  className="h-24 w-auto"
                 />
               </Link>
               <nav className="flex flex-col items-center gap-4">
